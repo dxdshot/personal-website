@@ -41,8 +41,8 @@ p, h1, h2, h3 { margin: 0; font-size: inherit; font-weight: 400; line-height: in
   position: fixed;
   top: 0;
   left: 0;
-  width: 400px;
-  height: 250px;
+  width: 280px;
+  height: 360px;
   pointer-events: none;
   z-index: 100;
   will-change: transform;

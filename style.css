@@ -26,16 +26,42 @@ a:hover, a:focus-visible { background-size: 100% 1px; }
 a:focus-visible { outline: 1px solid currentColor; outline-offset: 3px; }
 p, h1, h2, h3 { margin: 0; font-size: inherit; font-weight: 400; line-height: inherit; }
 
-.page { display: flex; justify-content: center; padding: 88px 24px; }
+.page { display: flex; justify-content: center; padding: 64px 24px 16px; }
 .column { width: 400px; max-width: 100%; }
 .avatar { display: grid; place-items: center; width: 32px; height: 32px; margin-bottom: 24px; border-radius: 9px; background: #1c1c1c; box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.12); color: var(--strong); font-size: 17px; line-height: 1; overflow: hidden; }
 .avatar img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: 50% 35%; }
 .subtitle, .muted { color: var(--muted); }
 .body-copy { display: flex; flex-direction: column; gap: 20px; margin-top: 18px; }
 .c-orange { color: var(--orange); }
+.projects { margin-top: 20px; color: var(--muted); }
 
-.divider { border: 0; border-top: 1px dashed var(--faint); margin: 22px 0 0; }
-.outro { margin-top: 22px; color: var(--muted); }
+.project-rail {
+  --project-left: max(24px, calc((100vw - 400px) / 2));
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+  margin-top: 20px;
+  padding: 0 24px 4px var(--project-left);
+  overflow-x: auto;
+  overflow-y: hidden;
+  overscroll-behavior-x: contain;
+  scrollbar-width: none;
+  cursor: grab;
+  -webkit-overflow-scrolling: touch;
+}
+.project-rail::-webkit-scrollbar { display: none; }
+.project-rail.is-dragging { cursor: grabbing; }
+.project-track { display: flex; gap: 16px; width: max-content; }
+.project-card {
+  flex: 0 0 auto;
+  width: 288px;
+  height: 288px;
+  border-radius: 16px;
+  background: #161616;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+}
+
+.divider { border: 0; border-top: 1px dashed var(--faint); margin: 24px 0 22px; }
+.outro { color: var(--muted); }
 .outro a { color: var(--strong); }
 
 .hover-preview {

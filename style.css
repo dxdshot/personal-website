@@ -32,7 +32,7 @@ p, h1, h2, h3 { margin: 0; font-size: inherit; font-weight: 400; line-height: in
 .subtitle, .muted { color: var(--muted); }
 .body-copy { display: flex; flex-direction: column; gap: 20px; margin-top: 18px; }
 .c-orange { color: var(--orange); }
-.small-caps { font-variant-caps: small-caps; }
+.small-caps { font-variant-caps: small-caps; text-transform: lowercase; }
 
 .divider { border: 0; border-top: 1px dashed var(--faint); margin: 22px 0 0; }
 .outro { margin-top: 22px; color: var(--muted); }

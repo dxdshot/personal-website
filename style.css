@@ -37,12 +37,38 @@ p, h1, h2, h3 { margin: 0; font-size: inherit; font-weight: 400; line-height: in
 .c-green { color: var(--green); }
 .c-orange { color: var(--orange); }
 
-.divider { border: 0; border-top: 1px dashed var(--faint); margin: 24px 0 22px; }
-.outro { color: var(--muted); }
+.divider { border: 0; border-top: 1px dashed var(--faint); margin: 22px 0 0; }
+.outro { margin-top: 22px; color: var(--muted); }
 .outro a { color: var(--strong); }
+
+.hover-preview {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 400px;
+  height: 250px;
+  pointer-events: none;
+  z-index: 100;
+  will-change: transform;
+}
+.hover-preview-inner {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  border-radius: 12px;
+  opacity: 0;
+  transform: scale(0.85);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(255, 255, 255, 0.1);
+  transition: opacity 220ms ease, transform 320ms cubic-bezier(0.23, 1, 0.32, 1);
+}
+.hover-preview.is-visible .hover-preview-inner { opacity: 1; transform: scale(1); }
+.hover-preview img { display: block; width: 100%; height: 100%; object-fit: cover; }
 
 @media (max-width: 560px) {
   .page { padding: 64px 22px; }
+}
+@media (hover: none), (max-width: 767px) {
+  .hover-preview { display: none; }
 }
 @media (prefers-reduced-motion: reduce) {
   a { transition: none; }

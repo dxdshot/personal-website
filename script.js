@@ -80,6 +80,25 @@
     });
   }
 
+  const stage = document.querySelector(".projects-stage");
+  const projectOpen = document.querySelector(".folder-open");
+  const projectBack = document.querySelector(".project-back");
+  if (stage && projectOpen && projectBack) {
+    const showDetail = () => {
+      stage.dataset.view = "detail";
+      requestAnimationFrame(() => projectBack.focus({ preventScroll: true }));
+    };
+    const showRail = () => {
+      stage.dataset.view = "rail";
+      projectOpen.focus({ preventScroll: true });
+    };
+    projectOpen.addEventListener("click", showDetail);
+    projectBack.addEventListener("click", showRail);
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape" && stage.dataset.view === "detail") showRail();
+    });
+  }
+
   const rail = document.querySelector(".project-rail");
   if (!rail) return;
 
@@ -168,6 +187,8 @@
 
   rail.addEventListener("pointerdown", (event) => {
     if (event.pointerType !== "mouse" || event.button !== 0) return;
+    // The first folder is a link to the project page, not a drag handle.
+    if (event.target.closest(".folder-open")) return;
     dragging = true;
     startX = event.clientX;
     startLeft = rail.scrollLeft;

@@ -107,6 +107,36 @@
     if (!frame) frame = requestAnimationFrame(render);
   };
 
+  // Resting positions that leave a folder fully in view: the start, each
+  // folder's right edge, and the end. Settling on these is what makes the last
+  // folder readable after a single scroll gesture.
+  const stops = () => {
+    const railLeft = rail.getBoundingClientRect().left;
+    const positions = [0, limit()];
+    for (const card of rail.querySelectorAll(".folder-card")) {
+      const rect = card.getBoundingClientRect();
+      const right = rect.right - railLeft + rail.scrollLeft;
+      positions.push(Math.min(limit(), Math.max(0, right - rail.clientWidth + 24)));
+    }
+    return [...new Set(positions.map((value) => Math.round(value)))].sort((a, b) => a - b);
+  };
+
+  const nearestStop = (value) =>
+    stops().reduce((best, stop) => (Math.abs(stop - value) < Math.abs(best - value) ? stop : best), 0);
+
+  let snapTimer = 0;
+  let direction = 0;
+  const settle = () => {
+    window.clearTimeout(snapTimer);
+    snapTimer = window.setTimeout(() => {
+      const list = stops();
+      const stop = direction > 0
+        ? (list.find((value) => value >= target - 0.5) ?? list[list.length - 1])
+        : ([...list].reverse().find((value) => value <= target + 0.5) ?? 0);
+      if (Math.abs(stop - target) > 1) goTo(stop);
+    }, 160);
+  };
+
   rail.addEventListener(
     "wheel",
     (event) => {
@@ -114,11 +144,23 @@
       const delta =
         Math.abs(event.deltaX) > Math.abs(event.deltaY) ? event.deltaX : event.deltaY;
       if (!delta) return;
-      if (Math.abs(event.deltaY) > Math.abs(event.deltaX)) event.preventDefault();
-      goTo(rail.scrollLeft + delta);
+      // At either end the rail must not swallow the wheel: let the page scroll
+      // so reaching the last folder never traps the visitor.
+      if ((target <= 0 && delta < 0) || (target >= limit() - 0.5 && delta > 0)) return;
+      event.preventDefault();
+      direction = delta > 0 ? 1 : -1;
+      goTo(target + delta);
+      settle();
     },
     { passive: false },
   );
+
+  // Touch scrolling (and any scroll not driven by goTo) resyncs the animated
+  // target so a later wheel event starts from the real position.
+  rail.addEventListener("scroll", () => {
+    if (frame) return;
+    target = current = rail.scrollLeft;
+  });
 
   let dragging = false;
   let startX = 0;
@@ -147,6 +189,8 @@
     dragging = false;
     rail.classList.remove("is-dragging");
     if (rail.hasPointerCapture(event.pointerId)) rail.releasePointerCapture(event.pointerId);
+    const stop = nearestStop(target);
+    if (Math.abs(stop - target) > 1) goTo(stop);
   };
 
   rail.addEventListener("pointerup", endDrag);

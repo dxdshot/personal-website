@@ -83,17 +83,30 @@
   const stage = document.querySelector(".projects-stage");
   const projectOpen = document.querySelector(".folder-open");
   const projectBack = document.querySelector(".project-back");
-  if (stage && projectOpen && projectBack) {
+  const projectDetail = document.querySelector(".project-detail");
+  if (stage && projectOpen && projectBack && projectDetail) {
+    // The rail is 400px tall; the explanation can be taller. Give the stage
+    // the detail's height so the page scrolls far enough to read the end,
+    // with room for the fixed chat bubble at the bottom.
+    const sizeStage = () => {
+      if (stage.dataset.view !== "detail") return;
+      stage.style.minHeight = `${projectDetail.offsetHeight + 96}px`;
+    };
     const showDetail = () => {
       stage.dataset.view = "detail";
-      requestAnimationFrame(() => projectBack.focus({ preventScroll: true }));
+      requestAnimationFrame(() => {
+        sizeStage();
+        projectBack.focus({ preventScroll: true });
+      });
     };
     const showRail = () => {
       stage.dataset.view = "rail";
+      stage.style.minHeight = "";
       projectOpen.focus({ preventScroll: true });
     };
     projectOpen.addEventListener("click", showDetail);
     projectBack.addEventListener("click", showRail);
+    window.addEventListener("resize", sizeStage);
     document.addEventListener("keydown", (event) => {
       if (event.key === "Escape" && stage.dataset.view === "detail") showRail();
     });

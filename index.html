@@ -11,10 +11,11 @@
     <link rel="stylesheet" href="intro.css" />
     <script>
       (function () {
-        var key = "dd-intro-seen-v1";
+        var key = "dd-intro-seen-v2";
         var root = document.documentElement;
         var seen = false;
-        try { seen = localStorage.getItem(key) === "1"; } catch (e) {}
+        if (/[?&]intro=1\b/.test(location.search)) seen = false;
+        else { try { seen = localStorage.getItem(key) === "1"; } catch (e) {} }
         if (seen) return;
         root.classList.add("intro-on");
         setTimeout(function () {

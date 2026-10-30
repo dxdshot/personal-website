@@ -1461,13 +1461,14 @@
    * intro controller
    * ------------------------------------------------------------------ */
 
-  var KEY = "dd-intro-seen-v1";
+  var KEY = "dd-intro-seen-v2";
   var LOOP_MS = (TICKS / FPS) * 1000;
   var HOLD_MS = Math.round(((TICKS - 1) / FPS) * 1000);
   var EXIT_MS = 500;
 
   function hasSeen() {
     try {
+      if (/[?&]intro=1\b/.test(window.location.search)) return false;
       return localStorage.getItem(KEY) === "1";
     } catch (e) {
       return false;

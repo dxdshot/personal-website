@@ -8,16 +8,19 @@ html.intro-on body {
 }
 
 html.intro-on .page,
-html.intro-on .hover-preview {
-  opacity: 0;
+html.intro-on .hover-preview,
+html.intro-on .chat-platform-widget {
+  opacity: 0 !important;
+  visibility: hidden !important;
 }
 
 html.intro-reveal .page {
-  animation: intro-page-in 900ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation: intro-page-in 620ms cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
-html.intro-reveal .hover-preview {
-  animation: intro-fade-in 700ms ease both;
+html.intro-reveal .hover-preview,
+html.intro-reveal .chat-platform-widget {
+  animation: intro-fade-in 620ms ease both;
 }
 
 @keyframes intro-page-in {
@@ -43,7 +46,7 @@ html.intro-reveal .hover-preview {
   background: #000;
   opacity: 1;
   overflow: hidden;
-  transition: opacity 800ms cubic-bezier(0.33, 1, 0.68, 1);
+  transition: opacity 460ms cubic-bezier(0.33, 1, 0.68, 1);
   will-change: opacity;
 }
 

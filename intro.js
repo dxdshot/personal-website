@@ -8,14 +8,14 @@
    * params
    * ------------------------------------------------------------------ */
 
-  var TICKS = 98;
+  var TICKS = 104;
   var FPS = 30;
 
   var PAPER = "#000000";
   var INK = "#f4f2ef";
 
   var BODY_TINT = 0.45;
-  var ARRIVAL_STEP = 20;
+  var ARRIVAL_STEP = 24;
 
   var FONT_FRAC = 0.09;
   var BASELINE_FRAC = 0.541;
@@ -43,11 +43,11 @@
 
   var GLIDE_RATE = 1;
 
-  var TINT_TICK = 58;
+  var TINT_TICK = 64;
   var TINT_LEN = 8;
 
-  var SHAKE_TICK = 64;
-  var SHAKE_END = 80;
+  var SHAKE_TICK = 70;
+  var SHAKE_END = 86;
 
   var SHAKE_ROT = 13;
   var SHAKE_DY = 6;
@@ -65,7 +65,7 @@
   var INHALE_LIFT = 4.5;
   var INHALE_SCALE = 0.055;
 
-  var BURST_TICK = 84;
+  var BURST_TICK = 90;
   var REF_BURST = 44;
   var STROKE_OFFSET = REF_BURST - BURST_TICK;
 
@@ -101,8 +101,8 @@
   var THROW_BALLISTIC = 1.9;
   var THROW_BALLISTIC_AT = BURST_TICK + 7;
 
-  var WORD_FADE_START = BURST_TICK + 6.5;
-  var WORD_FADE_END = BURST_TICK + 8;
+  var WORD_FADE_START = BURST_TICK + 5;
+  var WORD_FADE_END = BURST_TICK + 9;
 
   var STREAK_LEN = 90;
   var STREAK_ALPHA = 0.35;
@@ -535,7 +535,15 @@
     c.height = Math.max(1, Math.round(r.height * this.dpr));
     this.buildLayout();
     this.lastTick = -1;
-    if (!this.running) this.renderStill();
+    if (!this.running) this.renderBlank();
+  };
+
+  LoudBurst.prototype.renderBlank = function () {
+    if (!this.ok) return;
+    var ctx = this.ctx;
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+    ctx.fillStyle = PAPER;
+    ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
   };
 
   LoudBurst.prototype.buildLayout = function () {
@@ -1455,8 +1463,8 @@
 
   var KEY = "dd-intro-seen-v1";
   var LOOP_MS = (TICKS / FPS) * 1000;
-  var HOLD_MS = Math.round(LOOP_MS) - 60;
-  var EXIT_MS = 900;
+  var HOLD_MS = Math.round(((TICKS - 1) / FPS) * 1000);
+  var EXIT_MS = 500;
 
   function hasSeen() {
     try {
@@ -1542,7 +1550,10 @@
       window.clearTimeout(timer);
 
       try {
-        if (engine) engine.stop();
+        if (engine) {
+          engine.stop();
+          engine.renderBlank();
+        }
       } catch (e) {
         /* already gone */
       }
@@ -1605,15 +1616,20 @@
       return;
     }
 
-    /* Wait one frame so the canvas has its laid-out size, and let the webfont
-       settle before measuring the line. */
+    /* One frame so the canvas has its laid-out size, then start immediately.
+       If the webfont lands later we re-measure in place rather than holding a
+       blank screen. */
     requestAnimationFrame(function () {
       if (done) return;
       engine.resize();
+      startLoop();
       if (document.fonts && document.fonts.ready) {
-        document.fonts.ready.then(startLoop, startLoop);
-      } else {
-        startLoop();
+        document.fonts.ready.then(
+          function () {
+            if (!done && engine) engine.resize();
+          },
+          function () {}
+        );
       }
     });
   }

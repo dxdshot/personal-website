@@ -1518,13 +1518,7 @@
     canvas.className = "dd-intro-canvas";
     stage.appendChild(canvas);
 
-    var skip = document.createElement("button");
-    skip.type = "button";
-    skip.className = "dd-intro-skip";
-    skip.textContent = "Skip";
-
     overlay.appendChild(stage);
-    overlay.appendChild(skip);
     document.body.appendChild(overlay);
 
     var reduced = false;
@@ -1580,12 +1574,6 @@
       else engine.start();
       timer = window.setTimeout(finish, reduced ? 1500 : HOLD_MS);
     }
-
-    skip.addEventListener("click", function (event) {
-      event.preventDefault();
-      event.stopPropagation();
-      finish();
-    });
 
     overlay.addEventListener("click", finish);
     window.addEventListener("keydown", finish);

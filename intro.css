@@ -66,43 +66,8 @@ html.intro-reveal .chat-platform-widget {
   height: 100%;
 }
 
-.dd-intro-skip {
-  position: absolute;
-  right: 26px;
-  bottom: 20px;
-  appearance: none;
-  border: 0;
-  padding: 8px 10px;
-  background: transparent;
-  color: rgba(255, 255, 255, 0.28);
-  font: inherit;
-  font-size: 11px;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  cursor: pointer;
-  opacity: 0;
-  animation: intro-skip-in 700ms ease 900ms both;
-  transition: color 200ms ease;
-}
-
-.dd-intro-skip:hover,
-.dd-intro-skip:focus-visible {
-  color: rgba(255, 255, 255, 0.8);
-}
-
-.dd-intro-skip:focus-visible {
-  outline: 1px solid rgba(255, 255, 255, 0.45);
-  outline-offset: 2px;
-}
-
-@keyframes intro-skip-in {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
 @media (prefers-reduced-motion: reduce) {
-  .dd-intro,
-  .dd-intro-skip {
+  .dd-intro {
     transition-duration: 250ms !important;
     animation-duration: 1ms !important;
   }
